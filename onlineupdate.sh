@@ -12,5 +12,8 @@ echo "-----------------------------------------------------"
 echo "Date:          $TODAY"
 echo "-----------------------------------------------------"
 
-## Openflixr Online Update version 1.0
+## Openflixr Online Update version 1.0.0
 echo "OpenFLIXR Online Update:"
+cd /opt/update
+git pull
+bash start.sh
