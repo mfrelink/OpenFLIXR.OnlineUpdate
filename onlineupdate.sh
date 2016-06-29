@@ -13,7 +13,11 @@ echo "Date:          $TODAY"
 echo "-----------------------------------------------------"
 
 ## Openflixr Online Update version 1.0.0
+echo ""
+echo "OpenFLIXR Wizard Update:"
+cd /usr/share/nginx/html/setup
+git pull -v
 echo "OpenFLIXR Online Update:"
 cd /opt/update
-git pull
-bash start.sh
+git pull -v
+bash update1_1.sh
