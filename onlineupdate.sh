@@ -20,6 +20,7 @@ git pull -v
 echo ""
 echo "OpenFLIXR Online Update:"
 cd /opt/update
+chmod -x /opt/update/scripts/*
 git pull -v
 echo ""
 echo "OpenFLIXR installing updates:"
