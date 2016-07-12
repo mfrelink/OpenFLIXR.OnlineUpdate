@@ -5,4 +5,4 @@ It will auto-update to keep everything running smooth and is preconfigured with 
 
 It’s ready to go in a couple of minutes!
 
-[Get more info at](https://www.google.com)
+[Get more info at www.openflixr.com](http://www.openflixr.com)
