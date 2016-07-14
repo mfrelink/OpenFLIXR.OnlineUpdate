@@ -32,7 +32,7 @@ chmod +x /opt/update/dev/*
 FILES=/opt/update/doneupdate/*
 for f in $FILES
 do
-  rm /opt/update/scripts/$f
+  rm $f
 done
 
 run-parts /opt/update/scripts
