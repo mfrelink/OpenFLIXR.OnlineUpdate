@@ -29,6 +29,11 @@ echo "OpenFLIXR installing updates:"
 chmod +x /opt/update/scripts/*
 chmod +x /opt/update/dev/*
 
+if [ "$1" == 'force' ]
+then
+rm -rf /opt/update/doneupdate/*
+fi
+
 cd /opt/update/doneupdate/
 FILES=*
 
