@@ -33,7 +33,7 @@ cd /opt/update/doneupdate/
 FILES=*
 for f in $FILES
 do
-  rm /opt/update/scripts/$f
+  echo /opt/update/scripts/$f
 done
 
-run-parts /opt/update/scripts
+#run-parts /opt/update/scripts
