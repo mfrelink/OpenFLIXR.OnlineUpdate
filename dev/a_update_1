@@ -6,10 +6,15 @@ THISUSER=$(whoami)
            exit 1
     fi
 
-exec 1> >(tee -a /var/log/onlineupdate1.log) 2>&1
+exec 1> >(tee -a /var/log/openflixrupdate/a_update_1.log) 2>&1
 TODAY=$(date)
 echo "-----------------------------------------------------"
 echo "Date:          $TODAY"
 echo "-----------------------------------------------------"
 
-## OpenFLIXR Online Update version 1.1
+## OpenFLIXR Update version 1.1
+
+## Scripts
+
+## Let system know update has been installed
+touch /opt/update/doneupdate/a_update_1

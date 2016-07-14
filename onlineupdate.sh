@@ -6,7 +6,8 @@ THISUSER=$(whoami)
            exit 1
     fi
 
-exec 1> >(tee -a /var/log/onlineupdate.log) 2>&1
+mkdir /var/log/openflixrupdate
+exec 1> >(tee -a /var/log/openflixrupdate/onlineupdate.log) 2>&1
 TODAY=$(date)
 echo "-----------------------------------------------------"
 echo "Date:          $TODAY"
@@ -27,4 +28,11 @@ echo ""
 echo "OpenFLIXR installing updates:"
 chmod +x /opt/update/scripts/*
 chmod +x /opt/update/dev/*
+
+FILES=/opt/update/doneupdate/*
+for f in $FILES
+do
+  rm /opt/update/scripts/$f
+done
+
 run-parts /opt/update/scripts
