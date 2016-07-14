@@ -29,10 +29,11 @@ echo "OpenFLIXR installing updates:"
 chmod +x /opt/update/scripts/*
 chmod +x /opt/update/dev/*
 
-FILES=/opt/update/doneupdate/*
+cd /opt/update/doneupdate/
+FILES=*
 for f in $FILES
 do
-  rm $f
+  rm /opt/update/scripts/$f
 done
 
 run-parts /opt/update/scripts
