@@ -31,9 +31,12 @@ chmod +x /opt/update/dev/*
 
 cd /opt/update/doneupdate/
 FILES=*
-for f in $FILES
-do
-  echo /opt/update/scripts/$f
-done
 
-#run-parts /opt/update/scripts
+for f in $FILES
+  do
+    if [ "$f" != '*' ]
+        then
+          rm /opt/update/scripts/$f
+    fi
+  done
+run-parts /opt/update/scripts
