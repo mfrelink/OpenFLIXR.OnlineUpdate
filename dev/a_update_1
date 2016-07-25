@@ -17,6 +17,7 @@ echo "-----------------------------------------------------"
 ## Scripts
 # update ubooquity
 service ubooquity stop
+cd /tmp
 wget http://vaemendis.net/ubooquity/downloads/Ubooquity-1.10.1.zip
 unzip Ubooquity-1.10.1.zip
 cp Ubooquity.jar /opt/ubooquity/
