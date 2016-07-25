@@ -12,9 +12,31 @@ echo "-----------------------------------------------------"
 echo "Date:          $TODAY"
 echo "-----------------------------------------------------"
 
-## OpenFLIXR Update version 1.1
+## OpenFLIXR Update version 1.0.5
 
 ## Scripts
+# update ubooquity
+service ubooquity stop
+wget http://vaemendis.net/ubooquity/downloads/Ubooquity-1.10.1.zip
+unzip Ubooquity-1.10.1.zip
+cp Ubooquity.jar /opt/ubooquity/
+
+# fix ubooquity out of memory
+sed -i 's/^DAEMON_OPTS.*/DAEMON_OPTS="-jar -Xmx512m \/opt\/ubooquity\/Ubooquity.jar -webadmin -headless -port 2022"/' /etc/init.d/ubooquity
+systemctl daemon-reload
+
+# missing trusted root certificates
+mozroots --import --ask-remove
+
+# fix sub-zero after update
+sed -i 's/.*Sub-Zero.bundle.*/git clone https:\/\/github.com\/pannal\/Sub-Zero.bundle \
+service plexmediaserver restart/' /opt/openflixr/updateof
+
+# fix landing page offline
+sed -i 's/if (data < 1000){.*/if (data < 5000){/' /usr/share/nginx/html/openflixr/index.html
 
 ## Let system know update has been installed
 touch /opt/update/doneupdate/a_update_1
+
+# Reboot system just to be sure
+reboot now
