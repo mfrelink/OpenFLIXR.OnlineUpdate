@@ -1,0 +1,29 @@
+#!/bin/bash
+THISUSER=$(whoami)
+    if [ $THISUSER != 'root' ]
+        then
+            echo 'You must use sudo to run this script, sorry!'
+           exit 1
+    fi
+
+exec 1> >(tee -a /var/log/openflixrupdate/b_update_2.log) 2>&1
+TODAY=$(date)
+echo "-----------------------------------------------------"
+echo "Date:          $TODAY"
+echo "-----------------------------------------------------"
+
+## OpenFLIXR Update version 1.0.6
+
+## Scripts
+# Plex Media Server machine ID fix
+cd /var/lib/plexmediaserver/Library/Application\ Support/Plex\ Media\ Server/
+rm Preferences.xml
+
+## Let system know update has been installed
+touch /opt/update/doneupdate/b_update_2
+
+## Update version
+sed -i 's/1.0.*/1.0.6 Dionysus/' /opt/openflixr/version
+
+# Reboot system just to be sure
+reboot now

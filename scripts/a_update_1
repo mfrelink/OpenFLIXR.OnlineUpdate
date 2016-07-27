@@ -39,6 +39,3 @@ sed -i 's/if (data < 1000){.*/if (data < 5000){/' /usr/share/nginx/html/openflix
 
 ## Let system know update has been installed
 touch /opt/update/doneupdate/a_update_1
-
-# Reboot system just to be sure
-reboot now
