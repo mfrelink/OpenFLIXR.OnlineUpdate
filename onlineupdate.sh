@@ -13,21 +13,19 @@ echo "-----------------------------------------------------"
 echo "Date:          $TODAY"
 echo "-----------------------------------------------------"
 
-## OpenFLIXR Online Update version 1.0.0
+## OpenFLIXR Online Update version 1.0.1
 echo ""
 echo "OpenFLIXR Wizard Update:"
 cd /usr/share/nginx/html/setup
-git pull -v
+git pull
 echo ""
 echo "OpenFLIXR Online Update:"
 cd /opt/update
 chmod -x /opt/update/scripts/*
-chmod -x /opt/update/dev/*
-git pull -v
+git pull
 echo ""
 echo "OpenFLIXR installing updates:"
 chmod +x /opt/update/scripts/*
-chmod +x /opt/update/dev/*
 
 if [ "$1" == 'force' ]
 then

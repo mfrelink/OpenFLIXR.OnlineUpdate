@@ -1,0 +1,36 @@
+#!/bin/bash
+THISUSER=$(whoami)
+    if [ $THISUSER != 'root' ]
+        then
+            echo 'You must use sudo to run this script, sorry!'
+           exit 1
+    fi
+
+exec 1> >(tee -a /var/log/openflixrupdate/c_update_3.log) 2>&1
+TODAY=$(date)
+echo "-----------------------------------------------------"
+echo "Date:          $TODAY"
+echo "-----------------------------------------------------"
+
+## OpenFLIXR Update version 1.0.8
+
+## Scripts
+# Increased performance for media junkies
+service nginx stop
+cd /tmp
+wget http://www.openflixr.com/updates/nginx.conf -o /etc/nginx/nginx.conf
+cp nginx.conf /etc/nginx/
+sed -i 's/#kernel.printk.*/kernel.printk = 3 4 1 3/' /etc/sysctl.conf
+
+# Increased security
+sed -i 's/add_header X-XSS-Protection.*/#add_header X-XSS-Protection "1; mode=block";/' /etc/nginx/sites-enabled/reverse
+sed -i 's/location \/openflixr {.*/location \/openflixr { add_header X-Robots-Tag none; add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always; add_header X-Content-Type-Options "nosniff" always; add_header X-Frame-Options "SAMEORIGIN" always; add_header X-XSS-Protection "1;mode=block";/' /etc/nginx/sites-enabled/reverse
+
+## Let system know update has been installed
+touch /opt/update/doneupdate/c_update_3
+
+## Update version
+sed -i 's/1.*/1.0.8 Dionysus/' /opt/openflixr/version
+
+# Reboot system just to be sure
+reboot now

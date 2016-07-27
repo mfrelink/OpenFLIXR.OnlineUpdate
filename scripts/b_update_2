@@ -21,9 +21,3 @@ rm Preferences.xml
 
 ## Let system know update has been installed
 touch /opt/update/doneupdate/b_update_2
-
-## Update version
-sed -i 's/1.0.*/1.0.6 Dionysus/' /opt/openflixr/version
-
-# Reboot system just to be sure
-reboot now
