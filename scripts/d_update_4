@@ -28,6 +28,7 @@ sed -i 's/location \/openflixr {.*/location \/openflixr { add_header X-Robots-Ta
 # Manually update Plex Media Server
 cd /tmp
 wget https://raw.githubusercontent.com/mfrelink/OpenFLIXR.OnlineUpdate/master/updates/updateplex.sh
+cp updateplex.sh /opt/openflixr
 chmod +x /opt/openflixr/updateplex.sh
 
 ## Let system know update has been installed
