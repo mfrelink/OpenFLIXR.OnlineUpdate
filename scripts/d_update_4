@@ -1,0 +1,40 @@
+#!/bin/bash
+THISUSER=$(whoami)
+    if [ $THISUSER != 'root' ]
+        then
+            echo 'You must use sudo to run this script, sorry!'
+           exit 1
+    fi
+
+exec 1> >(tee -a /var/log/openflixrupdate/d_update_4.log) 2>&1
+TODAY=$(date)
+echo "-----------------------------------------------------"
+echo "Date:          $TODAY"
+echo "-----------------------------------------------------"
+
+## OpenFLIXR Update version 1.1.1
+
+## Scripts
+# Increased performance for media junkies part 2
+service nginx stop
+cd /tmp
+wget https://raw.githubusercontent.com/mfrelink/OpenFLIXR.OnlineUpdate/master/updates/nginx.conf
+cp nginx.conf /etc/nginx/nginx.conf
+
+# Enhanced privacy
+sed -i 's/add_header X-Robots-Tag.*/add_header X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex";/' /etc/nginx/sites-enabled/reverse
+sed -i 's/location \/openflixr {.*/location \/openflixr { add_header X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex"; add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always; add_header X-Content-Type-Options "nosniff" always; add_header X-Frame-Options "SAMEORIGIN" always; add_header X-XSS-Protection "1;mode=block";/' /etc/nginx/sites-enabled/reverse
+
+# Manually update Plex Media Server
+cd /tmp
+wget https://raw.githubusercontent.com/mfrelink/OpenFLIXR.OnlineUpdate/master/updates/updateplex.sh
+chmod +x /opt/openflixr/updateplex.sh
+
+## Let system know update has been installed
+touch /opt/update/doneupdate/d_update_4
+
+## Update version
+sed -i 's/1.*/1.1.1 Dionysus/' /opt/openflixr/version
+
+# Reboot system just to be sure
+reboot now
