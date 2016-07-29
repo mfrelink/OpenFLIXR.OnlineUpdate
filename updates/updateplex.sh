@@ -13,6 +13,6 @@ THISUSER=$(whoami)
     fi
 
 cd /opt/plexupdate
-bash plexupdate.sh -p
-dpkg -i plexmediaserver*.deb
-rm plexmediaserver*
+bash plexupdate.sh -p 2> /dev/null
+dpkg -i plexmediaserver*.deb 2> /dev/null
+rm plexmediaserver* 2> /dev/null
