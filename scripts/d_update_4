@@ -33,9 +33,3 @@ chmod +x /opt/openflixr/updateplex.sh
 
 ## Let system know update has been installed
 touch /opt/update/doneupdate/d_update_4
-
-## Update version
-sed -i 's/1.*/1.1.1 Dionysus/' /opt/openflixr/version
-
-# Reboot system just to be sure
-reboot now
