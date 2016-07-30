@@ -15,7 +15,7 @@ echo "-----------------------------------------------------"
 ## OpenFLIXR Update version 1.0.8
 
 ## Scripts
-# Increased performance for media junkies
+# Improved performance for media junkies
 service nginx stop
 cd /tmp
 wget https://raw.githubusercontent.com/mfrelink/OpenFLIXR.OnlineUpdate/master/updates/nginx.conf

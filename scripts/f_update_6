@@ -1,0 +1,70 @@
+#!/bin/bash
+THISUSER=$(whoami)
+    if [ $THISUSER != 'root' ]
+        then
+            echo 'You must use sudo to run this script, sorry!'
+           exit 1
+    fi
+
+exec 1> >(tee -a /var/log/openflixrupdate/f_update_6.log) 2>&1
+TODAY=$(date)
+echo "-----------------------------------------------------"
+echo "Date:          $TODAY"
+echo "-----------------------------------------------------"
+
+## OpenFLIXR Update version 1.1.7
+
+## Scripts
+# Improved HTTP/2 performance
+service nginx stop
+cd /tmp
+wget https://raw.githubusercontent.com/mfrelink/OpenFLIXR.OnlineUpdate/master/updates/nginx.conf
+cp nginx.conf /etc/nginx/nginx.conf
+
+# Local caching recursor for faster DNS resolving
+apt-get install pdns-recursor -y
+pdns_recursor --config
+sed -i 's/# forward-zones=/forward-zones=8.8.4.4;8.8.8.8/' /etc/powerdns/recursor.conf
+sed -i 's/dns-nameservers.*/dns-nameservers 127.0.0.1/' /etc/network/interfaces
+
+# Cache landing page
+sed -i 's/location \/openflixr {.*/location \/openflixr { add_header X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex"; add_header Strict-Transport-Security "max-age=31536000;includeSubDomains" always; add_header X-Content-Type-Options "nosniff" always; add_header X-Frame-Options "SAMEORIGIN" always; add_header X-XSS-Protection "1;mode=block";expires 1y;add_header Cache-Control "public";/' /etc/nginx/sites-enabled/reverse
+
+# Fix Sonarr/Sickrage in Plexrequest where they are both activated (which results in non working tv series requests)
+# plexrequests
+oldpassword=$(crudini --get /usr/share/nginx/html/setup/config.ini password oldpassword)
+if [ \"\$oldpassword\" == '' ]
+then
+oldpassword='openflixr'
+fi
+
+plexreqapi=$(curl -s -X GET --header 'Accept: application/json' 'http://localhost:3579/request/api/apikey?username=openflixr&password='$oldpassword'' | cut -c10-41)
+
+curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{
+"ApiKey": "'sickrageapiplaceholder'",
+"qualityProfile": "default",
+"Enabled": false,
+"Ip": "localhost",
+"Port": 8081,
+"SubDir": "sickrage"
+}' 'http://localhost:3579/request/api/settings/sickrage?apikey='$plexreqapi''
+
+curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{
+"ApiKey": "'sonarrapiplaceholder'",
+"qualityProfile": "undefined",
+"Enabled": false,
+"Ip": "localhost",
+"Port": 7979,
+"seasonFolders": true,
+"rootPath": "\/mnt\/series",
+"SubDir": "sonarr"
+}' 'http://localhost:3579/request/api/settings/sickrage?apikey='$plexreqapi''
+
+## Let system know update has been installed
+touch /opt/update/doneupdate/f_update_6
+
+## Update version
+sed -i 's/1.*/1.1.7 Dionysus/' /opt/openflixr/version
+
+# Reboot system just to be sure
+reboot now
