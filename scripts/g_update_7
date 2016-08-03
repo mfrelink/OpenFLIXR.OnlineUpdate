@@ -69,7 +69,7 @@ location /nzbhydra/ {\
 ' /etc/nginx/sites-enabled/reverse
 # current api key
 sabapi=$(cat /opt/openflixr/api.keys | grep SABnzbd | cut -c9-40)
-sed -i 's/.*placeholdersabkey.*/            "apikey": "'$sabapi'",/' /opt/nzbhydra/settings.cfg
+sed -i 's/.*placeholderapi.*/            "apikey": "'$sabapi'",/' /opt/nzbhydra/settings.cfg
 # start to write base files
 sudo service nzbhydra start
 
