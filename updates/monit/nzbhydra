@@ -1,0 +1,4 @@
+check process NZBhydra with pidfile /opt/nzbhydra/nzbhydra.pid
+    start program = "/usr/sbin/service nzbhydra start"
+    stop program = "/usr/sbin/service nzbhydra stop"
+    if failed host 127.0.0.1 port 5075 then restart

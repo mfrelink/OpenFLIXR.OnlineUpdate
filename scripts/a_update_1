@@ -30,12 +30,5 @@ systemctl daemon-reload
 # missing trusted root certificates
 mozroots --import --ask-remove
 
-# fix sub-zero after update
-sed -i 's/.*Sub-Zero.bundle.*/git clone https:\/\/github.com\/pannal\/Sub-Zero.bundle \
-service plexmediaserver restart/' /opt/openflixr/updateof
-
-# fix landing page offline
-sed -i 's/if (data < 1000){.*/if (data < 5000){/' /usr/share/nginx/html/openflixr/index.html
-
-## Let system know update has been installed
+## let system know update has been installed
 touch /opt/update/doneupdate/a_update_1

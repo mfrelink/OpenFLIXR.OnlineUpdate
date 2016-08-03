@@ -1,0 +1,5 @@
+check process ntopng with pidfile /var/tmp/ntopng.pid
+    start program = "/usr/sbin/service ntopng restart"
+    stop program = "/usr/sbin/service ntopng stop"
+    if failed host 127.0.0.1 port 3050 then restart
+    if cpu usage > 24% for 3 cycles then restart

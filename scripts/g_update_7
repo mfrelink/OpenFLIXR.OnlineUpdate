@@ -1,0 +1,103 @@
+#!/bin/bash
+THISUSER=$(whoami)
+    if [ $THISUSER != 'root' ]
+        then
+            echo 'You must use sudo to run this script, sorry!'
+           exit 1
+    fi
+
+exec 1> >(tee -a /var/log/openflixrupdate/g_update_7.log) 2>&1
+TODAY=$(date)
+echo "-----------------------------------------------------"
+echo "Date:          $TODAY"
+echo "-----------------------------------------------------"
+
+## OpenFLIXR Update version 1.2.5
+
+## Scripts
+# performance improvements
+cp /opt/update/updates/configs/nginx.conf /etc/nginx/nginx.conf
+# one less redirect (from /openflixr to /openflixr/)
+sed -i 's/return 301 /openflixr.*/return 301 \/openflixr\/;/' /etc/nginx/sites-enabled/reverse
+# HTTP/2 best setting
+sed -i 's/ssl_buffer_size.*/ssl_buffer_size 64k;/' /etc/nginx/sites-enabled/reverse
+
+# filebot groovy scripts
+git clone https://github.com/filebot/scripts /opt/groovy
+
+# restore default netdata update frequency as system is tuned enough to handle it
+sed -i 's/update every = 3.*/update every = 1/' /opt/netdata/etc/netdata/netdata.conf
+# 1 day history
+sed -i 's/# history = 3600.*/history = 86400/' /opt/netdata/etc/netdata/netdata.conf
+# KSM Enabled
+sed -i '/swapoff.*/a \
+echo 1 >\/sys\/kernel\/mm\/ksm\/run\
+echo 1000 >\/sys\/kernel\/mm\/ksm\/sleep_millisecs/' /etc/rc.local
+
+# landing page improvements
+cp /opt/update/updates/landingpage/index.html /usr/share/nginx/www/openflixr/index.html
+# add nginx config
+sed -i '/# add_config_2/a \
+location \/netdata\/netdata\/api\/v1 {\
+    auth_basic off;\
+    proxy_pass http:\/\/127.0.0.1:19999\/netdata\/api\/v1;\
+    proxy_set_header Host $host;\
+    proxy_set_header X-Real-IP $remote_addr;\
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\
+  }\
+' /etc/nginx/sites-enabled/reverse
+
+# mysql shutdown timeout fix
+sed -i 's/TimeoutSec.*/TimeoutSec=30/' /lib/systemd/system/mysql.service
+systemctl daemon-reload
+
+# userscript.sh
+cp /opt/update/updates/openflixr/userscript.sh /opt/openflixr/userscript.sh
+chmod +x /opt/openflixr/userscript.sh
+
+# NZBhydra installation
+git clone https://github.com/theotherp/nzbhydra /opt/nzbhydra
+cp /opt/update/updates/configs/nzbhydra.service /etc/systemd/system/nzbhydra.service
+cp /opt/update/updates/configs/settings.cfg /opt/nzbhydra/settings.cfg
+systemctl enable nzbhydra
+# nginx config
+sed -i '/# add_config_3/a \
+location /nzbhydra/ {\
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\
+    proxy_pass http:\/\/127.0.0.1:5075\/nzbhydra\/;\
+  }\
+' /etc/nginx/sites-enabled/reverse
+# current api key
+sabapi=$(cat /opt/openflixr/api.keys | grep SABnzbd | cut -c9-40)
+sed -i 's/.*placeholdersabkey.*/            "apikey": "'$sabapi'",/' /opt/nzbhydra/settings.cfg
+# start to write base files
+sudo service nzbhydra start
+
+# update updateof
+cp /opt/update/updates/openflixr/updateof /opt/openflixr/updateof
+chmod +x /opt/openflixr/updateof
+
+# monit configs
+cp /opt/update/updates/monit/cron /etc/monit/conf.d/cron
+cp /opt/update/updates/monit/cron /opt/config/monit/cron
+
+cp /opt/update/updates/monit/mysql /etc/monit/conf.d/mysql
+cp /opt/update/updates/monit/mysql /opt/config/monit/mysql
+
+cp /opt/update/updates/monit/nzbhydra /etc/monit/conf.d/nzbhydra
+cp /opt/update/updates/monit/nzbhydra /opt/config/monit/nzbhydra
+
+cp /opt/update/updates/monit/pdns /etc/monit/conf.d/pdns
+cp /opt/update/updates/monit/pdns /opt/config/monit/pdns
+
+cp /opt/update/updates/monit/ntopng /etc/monit/conf.d/ntopng
+cp /opt/update/updates/monit/ntopng /opt/config/monit/ntopng
+
+## let system know update has been installed
+touch /opt/update/doneupdate/g_update_7
+
+## update version
+sed -i 's/1.*/1.2.5 Dionysus/' /opt/openflixr/version
+
+# reboot system just to be sure
+reboot now

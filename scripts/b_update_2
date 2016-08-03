@@ -19,5 +19,5 @@ echo "-----------------------------------------------------"
 cd /var/lib/plexmediaserver/Library/Application\ Support/Plex\ Media\ Server/
 rm Preferences.xml
 
-## Let system know update has been installed
+## let system know update has been installed
 touch /opt/update/doneupdate/b_update_2
