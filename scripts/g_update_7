@@ -35,7 +35,7 @@ echo 1 >\/sys\/kernel\/mm\/ksm\/run\
 echo 1000 >\/sys\/kernel\/mm\/ksm\/sleep_millisecs/' /etc/rc.local
 
 # landing page improvements
-cp /opt/update/updates/landingpage/index.html /usr/share/nginx/www/openflixr/index.html
+cp /opt/update/updates/landingpage/index.html /usr/share/nginx/html/openflixr/index.html
 # add nginx config
 sed -i '/# add_config_2/a \
 location \/netdata\/netdata\/api\/v1 {\
