@@ -26,11 +26,3 @@ cp /opt/update/updates/landingpage/check.png /usr/share/nginx/html/openflixr/ass
 
 ## let system know update has been installed
 touch /opt/update/doneupdate/h_update_8
-
-## update version
-sed -i 's/1.*/1.2.6 Dionysus/' /opt/openflixr/version
-sed -i 's/Media Server 1.*/Media Server 1.2.6<\/span>/' /usr/share/nginx/html/openflixr/index.html
-crudini --set /usr/share/nginx/html/setup/config.ini custom custom1 1.2.6
-
-# reboot system just to be sure
-reboot now

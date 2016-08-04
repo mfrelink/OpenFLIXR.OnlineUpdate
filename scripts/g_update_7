@@ -93,6 +93,3 @@ touch /opt/update/doneupdate/g_update_7
 
 ## update version
 sed -i 's/1.*/1.2.5 Dionysus/' /opt/openflixr/version
-
-# reboot system just to be sure
-reboot now
