@@ -5,6 +5,13 @@ echo "-----------------------------------------------------"
 echo "Date:	     $TODAY"
 echo "-----------------------------------------------------"
 
+THISUSER=$(whoami)
+    if [ $THISUSER != 'root' ]
+        then
+            echo 'You must use sudo to run this script, sorry!'
+            exit  1
+    fi
+
 ## Pip Apps
 echo ""
 echo "Home-Assistant:"

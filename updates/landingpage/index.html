@@ -89,19 +89,18 @@ setTimeout(refreshNetdataBadges, NETDATA_BADGES_AUTOREFRESH_SECONDS * 1000);
                 var serverImg = document.getElementById( "server-status-img" );
                 if (data < 10000){
                     serverMsg.innerHTML ='Online';
-                    serverImg.src = "assets/img/ipad-hand-on.png";
+                    serverImg.src = "assets/img/check.png";
                     body.addClass('online').removeClass("offline");
                 }else{
                     serverMsg.innerHTML = 'Online';
-                    serverImg.src = "assets/img/ipad-hand-on.png";
+                    serverImg.src = "assets/img/check.png";
                 }
             }, timeout);
         }
     </script>
 
-
     <title>OpenFLIXR</title>
-    	
+
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -110,12 +109,12 @@ setTimeout(refreshNetdataBadges, NETDATA_BADGES_AUTOREFRESH_SECONDS * 1000);
     <link href="assets/css/main.css" rel="stylesheet">
 
     <!-- Fonts from Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>    
-  
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+
   </head>
 
   <body onload="checkServer()" class="offline">
-    <div class="navbar navbar-default navbar-fixed-top">
+    <div class="hidden-sm hidden-xs navbar navbar-default navbar-fixed-top">
       <div class="container">
       </div>
     </div>
@@ -158,42 +157,42 @@ setTimeout(refreshNetdataBadges, NETDATA_BADGES_AUTOREFRESH_SECONDS * 1000);
 					<br/>
 					<form class="form-inline" role="form">
 					  <div class="form-group">
-					  </div>					  				
+					  </div>
 				</div>
 				<div class="col-md-6">
-					<img id="server-status-img" class="img-responsive" src="assets/img/ipad-hand.png" alt="">
+					<img id="server-status-img" class="img-responsive src="assets/img/ipad-hand.png" alt="">
 		</div>
 
 	</div>
 		</div>
 	</div>
-<div style="bottom:0;width: 100%;position: fixed;">
-<div class="col-md-10 col-md-offset-4" style="position:absolute;margin-top:31px;left:-5%;width:100%;">
+<div class="row-fluid" style="bottom:0;width: 100%;position: fixed;">
+<div class="hidden-md hidden-sm hidden-xs col-md-10 col-md-offset-4" style="position:absolute;margin-top:33px;left:-2%;width:85vw;">
 <div class="col-md-1"><img class="netdata-badge" src="/netdata/api/v1/badge.svg?chart=system.cpu&label=CPU&precision=1&after=-60&units=%20%25&value_color=grey:null|%231abc9c<75|%23F1C40F<85|%23E74C3C<100|%23235cbde0"></img></div>
 <div class="col-md-1"><img class="netdata-badge" src="/netdata/api/v1/badge.svg?chart=system.ram&label=RAM&precision=1&after=-60&units=%20%25&options=percentage&dimensions=used&value_color=grey:null|%231abc9c<75|%23F1C40F<85|%23E74C3C<100|%23235cbde0"></img></div>
 <div class="col-md-1"><img class="netdata-badge" src="/netdata/api/v1/badge.svg?chart=disk_space.sda1&label=SDA&precision=1&units=%20%25&options=percentage&dimensions=used&value_color=grey:null|%231abc9c<75|%23F1C40F<85|%23E74C3C<100|%23235cbde0"></img></div>
-<div class="col-md-1"><img class="netdata-badge" src="/netdata/api/v1/badge.svg?chart=system.ipv4&label=DN&units=Mbit&dimensions=received&divide=1024&precision=1&value_color=%231abc9c"></img></div>
-<div class="col-md-1"><img class="netdata-badge" src="/netdata/api/v1/badge.svg?chart=system.ipv4&label=UP&options=abs&units=Mbit&dimensions=sent&divide=1024&precision=1&value_color=%235cbde0"></img></div>
+<div class="col-md-1"><img class="netdata-badge" src="/netdata/api/v1/badge.svg?chart=system.ipv4&label=DN&units=Mbit&dimensions=received&divide=1000&precision=1&value_color=grey:null|%231abc9c<100|%23e128a9<10000"></img></div>
+<div class="col-md-1"><img class="netdata-badge" src="/netdata/api/v1/badge.svg?chart=system.ipv4&label=UP&options=abs&units=Mbit&dimensions=sent&divide=1000&precision=1&value_color=grey:null|%235cbde0<500|%23e128a9<10000"></img></div>
 </div>
 
-                <div class="row centered">
+                <div class="row">
 
                         <div class="col-md-4 text-left" style="margin-top:27px; margin-bottom:10px;">
-			<span style="color:#7b7b7b; padding-left: 5%;"><i class="fa fa-cube" style="color:#7b7b7b"></i> <a style="color:#bfbfbf" href="http://openflixr.com" target="_blank">OpenFLIXR </a>Media Server</span>
+			<span style="color:#7b7b7b; padding-left: 5%;"><i class="fa fa-cube" style="color:#7b7b7b"></i> <a style="color:#bfbfbf" href="http://openflixr.com" target="_blank">OpenFLIXR </a>Media Server 1.3.0</span>
 			</div>
 
-                        <div class="col-md-5">
+			<div class="col-md-5">
                         </div>
 
-                        <div class="col-md-1" data-toggle="tooltip" data-placement="top" title="Setup OpenFLIXR">
+                        <div class="hidden-sm hidden-xs col-md-1" data-toggle="tooltip" data-placement="top" title="Setup OpenFLIXR">
                         <h2><a href="/setup" target="_blank" ><i class="fa fa-sliders" aria-hidden="true" style="color:#bfbfbf"></i></a></h3>
                         </div>
 
-                        <div class="col-md-1" data-toggle="tooltip" data-placement="top" title="Online Help">
+                        <div class="hidden-sm hidden-xs col-md-1" data-toggle="tooltip" data-placement="top" title="Online Help">
 			<h2><a href="/support" target="_blank"><i class="fa fa-life-ring" aria-hidden="true" style="color:#bfbfbf"></i></a></h3>
 			</div>
 
-                       <div class="col-md-1" data-toggle="tooltip" data-placement="top" title="OpenFLIXR Forum">
+                       <div class="hidden-sm hidden-xs col-md-1" data-toggle="tooltip" data-placement="top" title="OpenFLIXR Forum">
                         <h2><a href="http://www.openflixr.com/forum" target="_blank"><i class="fa fa-comments-o aria-hidden="true" style="color:#bfbfbf"></i></a></h3>
                        </div>
 

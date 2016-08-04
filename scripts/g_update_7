@@ -35,8 +35,6 @@ echo 1 >\/sys\/kernel\/mm\/ksm\/run\
 echo 1000 >\/sys\/kernel\/mm\/ksm\/sleep_millisecs/' /etc/rc.local
 
 # landing page improvements
-cp /opt/update/updates/landingpage/index.html /usr/share/nginx/html/openflixr/index.html
-# add nginx config
 sed -i '/# add_config_2/a \
 location \/netdata\/api\/v1 {\
     auth_basic off;\
@@ -50,10 +48,6 @@ location \/netdata\/api\/v1 {\
 # mysql shutdown timeout fix
 sed -i 's/TimeoutSec.*/TimeoutSec=30/' /lib/systemd/system/mysql.service
 systemctl daemon-reload
-
-# userscript.sh
-cp /opt/update/updates/openflixr/userscript.sh /opt/openflixr/userscript.sh
-chmod +x /opt/openflixr/userscript.sh
 
 # NZBhydra installation
 git clone https://github.com/theotherp/nzbhydra /opt/nzbhydra
@@ -73,9 +67,10 @@ sed -i 's/.*placeholderapi.*/            "apikey": "'$sabapi'",/' /opt/nzbhydra/
 # start to write base files
 sudo service nzbhydra start
 
-# update updateof
-cp /opt/update/updates/openflixr/updateof /opt/openflixr/updateof
-chmod +x /opt/openflixr/updateof
+## Scripts
+# userscript.sh
+cp /opt/update/updates/openflixr/userscript.sh /opt/openflixr/userscript.sh
+chmod +x /opt/openflixr/userscript.sh
 
 # monit configs
 cp /opt/update/updates/monit/cron /etc/monit/conf.d/cron
