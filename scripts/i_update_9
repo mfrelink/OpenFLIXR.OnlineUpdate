@@ -18,11 +18,3 @@ pip uninstall html5lib
 
 ## let system know update has been installed
 touch /opt/update/doneupdate/i_update_9
-
-## update version
-sed -i 's/1.*/1.2.7 Dionysus/' /opt/openflixr/version
-sed -i 's/Media Server 1.*/Media Server 1.2.7<\/span>/' /usr/share/nginx/html/openflixr/index.html
-crudini --set /usr/share/nginx/html/setup/config.ini custom custom1 1.2.7
-
-# reboot system just to be sure
-reboot now

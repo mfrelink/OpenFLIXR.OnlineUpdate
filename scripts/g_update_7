@@ -90,6 +90,3 @@ cp /opt/update/updates/monit/ntopng /opt/config/monit/ntopng
 
 ## let system know update has been installed
 touch /opt/update/doneupdate/g_update_7
-
-## update version
-sed -i 's/1.*/1.2.5 Dionysus/' /opt/openflixr/version
