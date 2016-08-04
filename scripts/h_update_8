@@ -15,7 +15,6 @@ echo "-----------------------------------------------------"
 ## OpenFLIXR Update version 1.2.6
 # system updates
 pip install lxml
-#pip install html5lib
 
 # update updateof
 cp /opt/update/updates/openflixr/updateof /opt/openflixr/updateof

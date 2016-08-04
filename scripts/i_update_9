@@ -1,0 +1,28 @@
+#!/bin/bash
+THISUSER=$(whoami)
+    if [ $THISUSER != 'root' ]
+        then
+            echo 'You must use sudo to run this script, sorry!'
+           exit 1
+    fi
+
+exec 1> >(tee -a /var/log/openflixrupdate/i_update_9.log) 2>&1
+TODAY=$(date)
+echo "-----------------------------------------------------"
+echo "Date:          $TODAY"
+echo "-----------------------------------------------------"
+
+## OpenFLIXR Update version 1.2.7
+# hotfix for mylar, autosub, NZBhydra
+pip uninstall html5lib
+
+## let system know update has been installed
+touch /opt/update/doneupdate/i_update_9
+
+## update version
+sed -i 's/1.*/1.2.7 Dionysus/' /opt/openflixr/version
+sed -i 's/Media Server 1.*/Media Server 1.2.7<\/span>/' /usr/share/nginx/html/openflixr/index.html
+crudini --set /usr/share/nginx/html/setup/config.ini custom custom1 1.2.7
+
+# reboot system just to be sure
+reboot now
