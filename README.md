@@ -6,6 +6,3 @@ Smart auto-updating will keep everything up-to-date and running smooth. All prog
 > Ready to go in a couple of minutes!
 
 [Get more info at www.openflixr.com](http://www.openflixr.com)
-
-
-verifying user /u/OpenFLIXR for reddit
