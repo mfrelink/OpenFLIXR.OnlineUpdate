@@ -21,13 +21,5 @@ chmod +x /opt/openflixr/updateof
 cp /opt/update/updates/landingpage/index.html /usr/share/nginx/html/openflixr/index.html
 cp /opt/update/updates/landingpage/check.png /usr/share/nginx/html/openflixr/assets/img/check.png
 
-## update version
-sed -i 's/1.*/1.2.8 Dionysus/' /opt/openflixr/version
-sed -i 's/Media Server 1.*/Media Server 1.2.8<\/span>/' /usr/share/nginx/html/openflixr/index.html
-crudini --set /usr/share/nginx/html/setup/config.ini custom custom1 1.2.8
-
 ## let system know update has been installed
 touch /opt/update/doneupdate/j_update_10
-
-# reboot system just to be sure
-reboot now

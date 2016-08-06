@@ -16,10 +16,6 @@ echo "-----------------------------------------------------"
 # system updates
 pip install lxml
 
-# update updateof
-cp /opt/update/updates/openflixr/updateof /opt/openflixr/updateof
-chmod +x /opt/openflixr/updateof
-
 # landing page updates
 cp /opt/update/updates/landingpage/index.html /usr/share/nginx/html/openflixr/index.html
 cp /opt/update/updates/landingpage/check.png /usr/share/nginx/html/openflixr/assets/img/check.png

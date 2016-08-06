@@ -121,6 +121,6 @@ echo ""
 echo "Network Hang fix"
 nwadapter=$(/sbin/ifconfig -a | sed -n 's/^\([^ ]\+\).*/\1/p' | grep -Fvx -e lo -e dummy0)
 /sbin/ethtool -K $nwadapter gso off gro off tso off
-bash /opt/openflixr/userscript.sh
 
-# new_entry
+## User script
+bash /opt/openflixr/userscript.sh

@@ -1,0 +1,4 @@
+check process Wetty matching "wetty"
+    start program = "/usr/sbin/service wetty start"
+    stop program = "/usr/sbin/service wetty stop"
+    if failed host 127.0.0.1 port 4000 then restart
