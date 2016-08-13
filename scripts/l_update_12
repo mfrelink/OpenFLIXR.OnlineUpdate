@@ -48,6 +48,8 @@ cp /opt/update/updates/openflixr/fixplexrequests /opt/openflixr/fixplexrequests
 cp /opt/update/updates/landingpage/index.html /usr/share/nginx/html/openflixr/index.html
 cp /opt/update/updates/landingpage/bootstrap.css /usr/share/nginx/html/openflixr/assets/css/bootstrap.css
 cp /opt/update/updates/landingpage/dropdown.js /usr/share/nginx/html/openflixr/assets/js/dropdown.js
+cp /opt/update/updates/landingpage/bootstrap.js /usr/share/nginx/html/openflixr/assets/js/bootstrap.js
+cp /opt/update/updates/landingpage/bootstrap.min.js /usr/share/nginx/html/openflixr/assets/js/bootstrap.min.js
 cp /opt/update/updates/landingpage/checking.png /usr/share/nginx/html/openflixr/assets/img/checking.png
 
 # maintenance task + update fix
