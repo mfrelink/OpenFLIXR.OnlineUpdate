@@ -50,6 +50,7 @@ cp /opt/update/updates/landingpage/bootstrap.css /usr/share/nginx/html/openflixr
 cp /opt/update/updates/landingpage/dropdown.js /usr/share/nginx/html/openflixr/assets/js/dropdown.js
 cp /opt/update/updates/landingpage/bootstrap.js /usr/share/nginx/html/openflixr/assets/js/bootstrap.js
 cp /opt/update/updates/landingpage/bootstrap.min.js /usr/share/nginx/html/openflixr/assets/js/bootstrap.min.js
+cp /opt/update/updates/landingpage/jquery-3.1.0.min.js /usr/share/nginx/html/openflixr/assets/js/jquery-3.1.0.min.js
 cp /opt/update/updates/landingpage/checking.png /usr/share/nginx/html/openflixr/assets/img/checking.png
 
 # maintenance task + update fix
