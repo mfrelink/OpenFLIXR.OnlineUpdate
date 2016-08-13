@@ -1,0 +1,7 @@
+check host example.com with address example.com
+      if failed
+         port 443
+         with protocol https
+         and certificate valid > 10 days
+         use ssl options {verify: enable}
+      then alert

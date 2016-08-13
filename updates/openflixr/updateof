@@ -45,6 +45,7 @@ sudo bash createdirs
 echo ""
 echo "OpenFLIXR Wizard Update:"
 cd /usr/share/nginx/html/setup
+git reset --hard
 git pull
 echo ""
 echo "CouchPotato:"
@@ -115,12 +116,19 @@ echo "NZBhydra:"
 cd /opt/nzbhydra
 git pull
 echo ""
-echo "Cleanup"
+echo "Cleanup:"
 rm /usr/share/nginx/html/setup/setup.sh 2> /dev/null
 echo ""
-echo "Network Hang fix"
+echo "Network Hang fix:"
 nwadapter=$(/sbin/ifconfig -a | sed -n 's/^\([^ ]\+\).*/\1/p' | grep -Fvx -e lo -e dummy0)
 /sbin/ethtool -K $nwadapter gso off gro off tso off
+echo ""
+echo "Chat random username:"
+RUUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 10 | head -n 1)
+sed -i 's/nick: "OpenFLIXR.*/nick: "OpenFLIXR_'$RUUID'",/' /home/openflixr/.lounge/config.js
+sed -i 's/username: "OpenFLIXR.*/username: "OpenFLIXR_'$RUUID'",/' /home/openflixr/.lounge/config.js
+sed -i 's/realname: "OpenFLIXR.*/realname: "OpenFLIXR_'$RUUID'",/' /home/openflixr/.lounge/config.js
+service lounge restart
 
 ## User script
 bash /opt/openflixr/userscript.sh

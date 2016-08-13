@@ -23,16 +23,13 @@ apt-get remove --purge linux-firmware -y
 update-grub
 apt-get autoremove --purge x11-utils lxpolkit -y
 apt-get autoremove -y
-bash /opt/openflixr/apt-get-queue linux-tools-common linux-tools-4.4.0-31-generic
 bash /opt/openflixr/apt-get-queue pdns-recursor
 pdns_recursor --config
 sed -i 's/# forward-zones=/forward-zones=8.8.4.4;8.8.8.8/' /etc/powerdns/recursor.conf
 sed -i 's/dns-nameservers.*/dns-nameservers 127.0.0.1/' /etc/network/interfaces
 touch /etc/pf_ring/pf_ring.start
 sed -i '/swapoff.*/a \
-echo noop >\/sys\/block\/sda\/queue\/scheduler\
-modprobe msr\
-x86_energy_perf_policy performance' /etc/rc.local
+echo noop >\/sys\/block\/sda\/queue\/scheduler' /etc/rc.local
 
 # revert netdata 24 hour, back to 1 hour. It was eating too much memory
 sed -i 's/history = 86400.*/history = 3600/' /opt/netdata/etc/netdata/netdata.conf
@@ -70,17 +67,5 @@ location /wetty {\
 cp /opt/update/updates/monit/wetty /etc/monit/conf.d/wetty
 cp /opt/update/updates/monit/wetty /opt/config/monit/wetty
 
-# update updatewkly.sh
-cp /opt/update/updates/openflixr/updatewkly.sh /opt/openflixr/updatewkly.sh
-chmod +x /opt/openflixr/updatewkly.sh
-
-## update version
-sed -i 's/1.*/1.3.0 Bacchus/' /opt/openflixr/version
-sed -i 's/Media Server 1.*/Media Server 1.3.0 <sup>Bacchus<\/sup><\/span>/' /usr/share/nginx/html/openflixr/index.html
-crudini --set /usr/share/nginx/html/setup/config.ini custom custom1 1.3.0
-
 ## let system know update has been installed
 touch /opt/update/doneupdate/k_update_11
-
-# reboot system just to be sure
-reboot now

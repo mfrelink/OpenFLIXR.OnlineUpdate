@@ -18,10 +18,10 @@ echo "OS update:"
 apt-get clean -y
 apt-get autoremove --purge -y
 apt-get update -y
-apt-get install -f -y
-apt-get update -y
-apt-get upgrade -y
-apt-get dist-upgrade -y
+apt-get install -f -y --assume-no
+apt-get update -y --assume-no
+apt-get upgrade -y --assume-no
+apt-get dist-upgrade -y --assume-no
 
 ## Spotweb
 echo ""
@@ -112,5 +112,11 @@ pip install --upgrade pip
 pip2 install --upgrade pip
 pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
 pip2 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip2 install -U
+
+## Weekly maintenance task
+echo ""
+echo "Cleanup:"
+cd /opt/openflixr
+bash cleanup.sh
 
 # new_entry

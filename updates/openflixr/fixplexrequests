@@ -1,0 +1,28 @@
+# fix Sonarr/Sickrage in Plexrequest where they are both activated (which results in non working tv series requests)
+oldpassword=$(crudini --get /usr/share/nginx/html/setup/config.ini password oldpassword)
+if [ \"\$oldpassword\" == '' ]
+then
+oldpassword='openflixr'
+fi
+
+plexreqapi=$(curl -s -X GET --header 'Accept: application/json' 'http://localhost:3579/request/api/apikey?username=openflixr&password='$oldpassword'' | cut -c10-41)
+
+curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{
+"ApiKey": "'sickrageapiplaceholder'",
+"qualityProfile": "default",
+"Enabled": false,
+"Ip": "localhost",
+"Port": 8081,
+"SubDir": "sickrage"
+}' 'http://localhost:3579/request/api/settings/sickrage?apikey='$plexreqapi''
+
+curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{
+"ApiKey": "'sonarrapiplaceholder'",
+"qualityProfile": "undefined",
+"Enabled": false,
+"Ip": "localhost",
+"Port": 7979,
+"seasonFolders": true,
+"rootPath": "\/mnt\/series",
+"SubDir": "sonarr"
+}' 'http://localhost:3579/request/api/settings/sickrage?apikey='$plexreqapi''

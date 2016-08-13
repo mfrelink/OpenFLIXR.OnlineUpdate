@@ -1,0 +1,4 @@
+check process mopidy matching "mopidy"
+start program = "/etc/init.d/mopidy start"
+stop program = "/etc/init.d/mopidy stop"
+restart program = "/etc/init.d/mopidy restart"
