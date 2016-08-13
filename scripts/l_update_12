@@ -85,7 +85,6 @@ cp /opt/update/updates/monit/couchpotato /opt/config/monit/couchpotato
 cp /opt/update/updates/monit/certificate /opt/config/monit/certificate
 domain=$(crudini --get /usr/share/nginx/html/setup/config.ini access domainname)
 sed -i 's/check host example.com with address example.com/check host '$domain' with address '$domain'/' /opt/config/monit/certificate
-cp /opt/config/monit/certificate /etc/monit/conf.d/certificate
 
 ## update version
 sed -i 's/1.*/1.3.7 Bacchus/' /opt/openflixr/version
