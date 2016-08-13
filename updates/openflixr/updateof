@@ -124,7 +124,7 @@ nwadapter=$(/sbin/ifconfig -a | sed -n 's/^\([^ ]\+\).*/\1/p' | grep -Fvx -e lo 
 /sbin/ethtool -K $nwadapter gso off gro off tso off
 echo ""
 echo "Chat random username:"
-RUUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 10 | head -n 1)
+RUUID=$(uuidgen)
 sed -i 's/nick: "OpenFLIXR.*/nick: "OpenFLIXR_'$RUUID'",/' /home/openflixr/.lounge/config.js
 sed -i 's/username: "OpenFLIXR.*/username: "OpenFLIXR_'$RUUID'",/' /home/openflixr/.lounge/config.js
 sed -i 's/realname: "OpenFLIXR.*/realname: "OpenFLIXR_'$RUUID'",/' /home/openflixr/.lounge/config.js
