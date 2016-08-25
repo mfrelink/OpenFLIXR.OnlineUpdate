@@ -72,7 +72,7 @@ postfix check
 newaliases
 
 # move landing page to github
-rm -r /usr/share/nginx/html/openflixr/*
+rm -rf /usr/share/nginx/html/openflixr
 git clone https://github.com/mfrelink/OpenFLIXR.LandingPage /usr/share/nginx/html/openflixr
 
 # keep that time in sync!
