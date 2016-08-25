@@ -19,18 +19,5 @@ echo "-----------------------------------------------------"
 cp /opt/update/updates/openflixr/updateof /opt/openflixr/updateof
 chmod +x /opt/openflixr/updateof
 
-# landing page updates
-cp /opt/update/updates/landingpage/bootstrap.js /usr/share/nginx/html/openflixr/assets/js/bootstrap.js
-cp /opt/update/updates/landingpage/bootstrap.min.js /usr/share/nginx/html/openflixr/assets/js/bootstrap.min.js
-cp /opt/update/updates/landingpage/jquery-3.1.0.min.js /usr/share/nginx/html/openflixr/assets/js/jquery-3.1.0.min.js
-
-## update version
-sed -i 's/1.*/1.3.8 Bacchus/' /opt/openflixr/version
-sed -i 's/Media Server 1.*/Media Server 1.3.8 <sup>Bacchus<\/sup><\/span>/' /usr/share/nginx/html/openflixr/index.html
-crudini --set /usr/share/nginx/html/setup/config.ini custom custom1 1.3.8
-
 ## let system know update has been installed
 touch /opt/update/doneupdate/m_update_13
-
-# reboot system just to be sure
-reboot now

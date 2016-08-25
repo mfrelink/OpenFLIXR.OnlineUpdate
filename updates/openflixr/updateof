@@ -48,6 +48,10 @@ cd /usr/share/nginx/html/setup
 git reset --hard
 git pull
 echo ""
+echo "OpenFLIXR Landing Page:"
+cd /usr/share/nginx/html/openflixr
+git pull
+echo ""
 echo "CouchPotato:"
 cd /opt/CouchPotato
 git pull
@@ -116,12 +120,21 @@ echo "NZBhydra:"
 cd /opt/nzbhydra
 git pull
 echo ""
+echo "LazyLibrarian:"
+/opt/LazyLibrarian
+git pull
+echo ""
+echo "Plexupdate:"
+cd /opt/plexupdate
+git pull
+echo ""
 echo "Cleanup:"
 rm /usr/share/nginx/html/setup/setup.sh 2> /dev/null
 echo ""
 echo "Network Hang fix:"
 nwadapter=$(/sbin/ifconfig -a | sed -n 's/^\([^ ]\+\).*/\1/p' | grep -Fvx -e lo -e dummy0)
 /sbin/ethtool -K $nwadapter gso off gro off tso off
+rmmod dummy
 echo ""
 echo "Chat random username:"
 RUUID=$(uuidgen)
@@ -129,6 +142,10 @@ sed -i 's/nick: "OpenFLIXR.*/nick: "OpenFLIXR_'$RUUID'",/' /home/openflixr/.loun
 sed -i 's/username: "OpenFLIXR.*/username: "OpenFLIXR_'$RUUID'",/' /home/openflixr/.lounge/config.js
 sed -i 's/realname: "OpenFLIXR.*/realname: "OpenFLIXR_'$RUUID'",/' /home/openflixr/.lounge/config.js
 service lounge restart
+echo ""
+echo "Set Version"
+version=$(crudini --get /usr/share/nginx/html/setup/config.ini custom custom1)
+sed -i 's/Media Server <\/span><span class="label label-success ">1.*/Media Server <\/span><span class="label label-info ">'$version'<\/span>/' /usr/share/nginx/html/openflixr/index.html
 
 ## User script
 bash /opt/openflixr/userscript.sh

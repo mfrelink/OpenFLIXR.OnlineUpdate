@@ -17,16 +17,6 @@ echo "-----------------------------------------------------"
 cp /opt/update/updates/openflixr/apt-get-queue /opt/openflixr/apt-get-queue
 cp /opt/update/updates/configs/nginx.conf /etc/nginx/nginx.conf
 systemctl add-wants multi-user.target rpcbind.service
-bash /opt/openflixr/apt-get-queue linux-virtual
-apt-get autoremove --purge linux-generic -y
-apt-get remove --purge linux-firmware -y
-update-grub
-apt-get autoremove --purge x11-utils lxpolkit -y
-apt-get autoremove -y
-bash /opt/openflixr/apt-get-queue pdns-recursor
-pdns_recursor --config
-sed -i 's/# forward-zones=/forward-zones=8.8.4.4;8.8.8.8/' /etc/powerdns/recursor.conf
-sed -i 's/dns-nameservers.*/dns-nameservers 127.0.0.1/' /etc/network/interfaces
 touch /etc/pf_ring/pf_ring.start
 sed -i '/swapoff.*/a \
 echo noop >\/sys\/block\/sda\/queue\/scheduler' /etc/rc.local

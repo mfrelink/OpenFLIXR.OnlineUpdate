@@ -16,9 +16,5 @@ echo "-----------------------------------------------------"
 # system updates
 pip install lxml
 
-# landing page updates
-cp /opt/update/updates/landingpage/index.html /usr/share/nginx/html/openflixr/index.html
-cp /opt/update/updates/landingpage/check.png /usr/share/nginx/html/openflixr/assets/img/check.png
-
 ## let system know update has been installed
 touch /opt/update/doneupdate/h_update_8

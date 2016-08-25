@@ -14,10 +14,6 @@ echo "-----------------------------------------------------"
 
 ## OpenFLIXR Update version 1.3.7
 # system updates and maintenance
-bash /opt/openflixr/apt-get-queue vnstat vnstati iftop
-nwadapter=$(/sbin/ifconfig -a | sed -n 's/^\([^ ]\+\).*/\1/p' | grep -Fvx -e lo -e dummy0)
-vnstat --create -i $nwadapter
-sed -i 's/dns-nameservers.*/dns-nameservers 127.0.0.1/' /etc/network/interfaces
 tune2fs -c 1 /dev/sda1
 apt-get purge php5-memcached libmemcached11:amd64 memcached -y
 apt-get autoremove -y
@@ -43,12 +39,6 @@ chmod +x /opt/openflixr/ipaddress
 
 # plexrequests hotfix
 cp /opt/update/updates/openflixr/fixplexrequests /opt/openflixr/fixplexrequests
-
-# landing page updates
-cp /opt/update/updates/landingpage/index.html /usr/share/nginx/html/openflixr/index.html
-cp /opt/update/updates/landingpage/bootstrap.css /usr/share/nginx/html/openflixr/assets/css/bootstrap.css
-cp /opt/update/updates/landingpage/dropdown.js /usr/share/nginx/html/openflixr/assets/js/dropdown.js
-cp /opt/update/updates/landingpage/checking.png /usr/share/nginx/html/openflixr/assets/img/checking.png
 
 # maintenance task + update fix
 cp /opt/update/updates/openflixr/updatewkly.sh /opt/openflixr/updatewkly.sh

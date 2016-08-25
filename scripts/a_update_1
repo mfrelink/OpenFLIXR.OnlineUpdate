@@ -13,6 +13,7 @@ echo "Date:          $TODAY"
 echo "-----------------------------------------------------"
 
 ## OpenFLIXR Update version 1.0.5
+apt-get update -y
 
 ## Scripts
 # update ubooquity

@@ -18,8 +18,6 @@ pip uninstall html5lib
 pip install lxml
 cp /opt/update/updates/openflixr/updateof /opt/openflixr/updateof
 chmod +x /opt/openflixr/updateof
-cp /opt/update/updates/landingpage/index.html /usr/share/nginx/html/openflixr/index.html
-cp /opt/update/updates/landingpage/check.png /usr/share/nginx/html/openflixr/assets/img/check.png
 
 ## let system know update has been installed
 touch /opt/update/doneupdate/j_update_10

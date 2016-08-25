@@ -1,0 +1,161 @@
+#!/bin/bash
+THISUSER=$(whoami)
+    if [ $THISUSER != 'root' ]
+        then
+            echo 'You must use sudo to run this script, sorry!'
+           exit 1
+    fi
+
+exec 1> >(tee -a /var/log/openflixrupdate/n_update_14.log) 2>&1
+TODAY=$(date)
+echo "-----------------------------------------------------"
+echo "Date:          $TODAY"
+echo "-----------------------------------------------------"
+
+## OpenFLIXR Update version 1.5.0
+## regression fixes
+# local caching recursor for faster DNS resolving
+apt-get update -y
+apt-get install pdns-recursor -y
+pdns_recursor --config
+sed -i 's/# forward-zones=/forward-zones=8.8.4.4;8.8.8.8/' /etc/powerdns/recursor.conf
+sed -i 's/dns-nameservers.*/dns-nameservers 127.0.0.1/' /etc/network/interfaces
+
+# linux virtual kernel
+bash /opt/openflixr/apt-get-queue linux-virtual
+apt-get autoremove --purge linux-generic -y
+apt-get remove --purge linux-firmware -y
+update-grub
+apt-get autoremove --purge x11-utils lxpolkit -y
+apt-get autoremove -y
+
+# vnstat
+bash /opt/openflixr/apt-get-queue vnstat vnstati iftop
+nwadapter=$(/sbin/ifconfig -a | sed -n 's/^\([^ ]\+\).*/\1/p' | grep -Fvx -e lo -e dummy0)
+vnstat --create -i $nwadapter
+## end regression fixes
+
+# system updates
+sed -i 's/LogLevel INFO.*/LogLevel ERROR/' /etc/ssh/sshd_config
+rm /etc/monit/conf.d/certificate
+
+# fix a lot of apt-get and php stuff
+echo "Dpkg::Options {" >> /etc/apt/apt.conf.d/50unattended-upgrades
+echo '   "--force-confdef";' >> /etc/apt/apt.conf.d/50unattended-upgrades
+echo '   "--force-confold";' >> /etc/apt/apt.conf.d/50unattended-upgrades
+echo "};" >> /etc/apt/apt.conf.d/50unattended-upgrades
+# trick to let script wait for apt-get release lock
+bash /opt/openflixr/apt-get-queue nano
+add-apt-repository ppa:ondrej/php -y
+apt-get update -y --assume-no
+apt-get -f install -y --assume-no
+apt-get install php7.0-curl -y --assume-no
+apt-get upgrade -y --assume-no
+apt-get autoremove -y --assume-no
+apt-get update -y --assume-no
+apt-get -f install -y --assume-no
+apt-get upgrade -y --assume-no
+apt-get autoremove -y --assume-no
+
+# updateof updates
+cp /opt/update/updates/openflixr/updateof /opt/openflixr/updateof
+chmod +x /opt/openflixr/updateof
+
+# install Postfix
+debconf-set-selections <<\EOF
+postfix postfix/mailname string openflixr
+postfix postfix/main_mailer_type select Local only
+EOF
+bash /opt/openflixr/apt-get-queue postfix
+postfix upgrade-configuration
+postfix check
+newaliases
+
+# move landing page to github
+rm -r /usr/share/nginx/html/openflixr/*
+git clone https://github.com/mfrelink/OpenFLIXR.LandingPage /usr/share/nginx/html/openflixr
+
+# keep that time in sync!
+sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="quiet console=tty6 loglevel=0 rd.systemd.show_status=false rd.udev.log-priority=3 apparmor=0 security="/GRUB_CMDLINE_LINUX_DEFAULT="quiet console=tty6 loglevel=0 rd.systemd.show_status=false rd.udev.log-priority=3 apparmor=0 security= clocksource=acpi_pm"/' /etc/default/grub
+update-grub
+
+# monit ntp fix
+cp /opt/update/updates/monit/ntp /etc/monit/conf.d/ntp
+cp /opt/update/updates/monit/ntp /opt/config/monit/ntp
+
+# home assistant stop log spamming to the maximum ultra
+echo "logger:" >> /home/openflixr/.homeassistant/configuration.yaml
+echo "  default: critical" >> /home/openflixr/.homeassistant/configuration.yaml
+
+# now showing landing page
+mkdir /usr/share/nginx/html/latest
+cp -R /opt/update/latest/* /usr/share/nginx/html/latest
+
+sed -i '/# add_config_5/a \
+location /latest {\
+    auth_basic off;\
+    index index.php\
+    root /usr/share/nginx/html;\
+        }\
+\
+location ~ /latest/.+\.php$ {\
+    auth_basic off;\
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;\
+    fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;\
+    include fastcgi_params;\
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\
+    fastcgi_index index.php;\
+        }\
+' /etc/nginx/sites-enabled/reverse
+
+service plexpy stop
+sed -i 's/first_run_complete.*/first_run_complete = 1/' /opt/plexpy/config.ini
+sed -i 's/api_key.*/api_key = d9dd85114592600bfaf1bd4f8c0396ad/' /opt/plexpy/config.ini
+sed -i 's/api_enabled.*/api_enabled = 1/' /opt/plexpy/config.ini
+
+# install and configure LazyLibrarian
+git clone https://github.com/DobyTang/LazyLibrarian /opt/LazyLibrarian
+cp /opt/update/updates/configs/lazylibrarian.service /etc/systemd/system/
+cp /opt/update/updates/configs/lazylibrarian.ini /opt/LazyLibrarian
+systemctl daemon-reload
+systemctl enable lazylibrarian.service
+
+sed -i '/# add_config_6/a \
+location /librarian {\
+    proxy_pass http:\/\/127.0.0.1:5299;\
+    proxy_set_header Host $host;\
+    proxy_set_header X-Real-IP $remote_addr;\
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\
+        }\
+' /etc/nginx/sites-enabled/reverse
+
+sabapi=$(cat /opt/openflixr/api.keys | grep SABnzbd | cut -c9-40)
+
+crudini --set /opt/LazyLibrarian/lazylibrarian.ini SABnzbd sab_api $sabapi
+cp /opt/update/updates/openflixr/createdirs /opt/openflixr/createdirs
+chmod +x /opt/openflixr/createdirs
+cp /opt/update/updates/monit/lazylibrarian /etc/monit/conf.d/lazylibrarian
+cp /opt/update/updates/monit/lazylibrarian /opt/config/monit/lazylibrarian
+
+# error pages for LAN apps
+mkdir /usr/share/nginx/html/error/403.a
+cp /opt/update/updates/configs/error/index.html /usr/share/nginx/html/error/403.a
+sed -i 's/location \/wetty.*/location \/wetty { error_page 403 \/error\/403.a\/index.html;/' /etc/nginx/sites-enabled/reverse
+sed -i 's/location \/setup.*/location \/setup { error_page 403 \/error\/403.a\/index.html;/' /etc/nginx/sites-enabled/reverse
+sed -i 's/location \/support.*/location \/support { error_page 403 \/error\/403.a\/index.html;/' /etc/nginx/sites-enabled/reverse
+
+# security hardening
+chown -R www-data:www-data /usr/share/nginx/html/
+sed -i '/vm.swappiness=10/a \
+net.ipv4.tcp_timestamps = 0\
+' /etc/sysctl.conf
+
+## update version
+sed -i 's/1.*/1.5.0 Everything is Awesome/' /opt/openflixr/version
+crudini --set /usr/share/nginx/html/setup/config.ini custom custom1 1.5.0
+
+## let system know update has been installed
+touch /opt/update/doneupdate/n_update_14
+
+# reboot system just to be sure
+reboot now

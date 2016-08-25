@@ -15,12 +15,6 @@ echo "-----------------------------------------------------"
 ## OpenFLIXR Update version 1.1.7
 
 ## Scripts
-# local caching recursor for faster DNS resolving
-apt-get install pdns-recursor -y
-pdns_recursor --config
-sed -i 's/# forward-zones=/forward-zones=8.8.4.4;8.8.8.8/' /etc/powerdns/recursor.conf
-sed -i 's/dns-nameservers.*/dns-nameservers 127.0.0.1/' /etc/network/interfaces
-
 # cache landing page
 sed -i 's/location \/openflixr {.*/location \/openflixr { add_header X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noodp, notranslate, noimageindex"; add_header Strict-Transport-Security "max-age=31536000;includeSubDomains" always; add_header X-Content-Type-Options "nosniff" always; add_header X-Frame-Options "SAMEORIGIN" always; add_header X-XSS-Protection "1;mode=block";expires 1y;add_header Cache-Control "public";/' /etc/nginx/sites-enabled/reverse
 
