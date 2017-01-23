@@ -1,0 +1,4 @@
+check process PlexRequest matching "Ombi"
+    start program = "/usr/sbin/service plexrequestsnet start"
+    stop program = "/usr/sbin/service plexrequestsnet stop"
+    if failed host 127.0.0.1 port 3579 then restart

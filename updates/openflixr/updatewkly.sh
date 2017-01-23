@@ -21,7 +21,11 @@ apt-get update -y
 apt-get install -f -y --assume-no
 apt-get update -y --assume-no
 apt-get upgrade -y --assume-no
+sed -i s/Prompt=lts/Prompt=normal/g /etc/update-manager/release-upgrades
 apt-get dist-upgrade -y --assume-no
+cp /etc/apt/apt.conf.d/50unattended-upgrades.ucftmp /etc/apt/apt.conf.d/50unattended-upgrades
+rm /etc/apt/apt.conf.d/50unattended-upgrades.ucftmp
+dpkg --configure -a
 
 ## Spotweb
 echo ""
@@ -54,10 +58,10 @@ echo ""
 echo "Plexrequests.net:"
 service plexrequestsnet stop
 cd /tmp/
-plexrequestsver=$(wget -q https://github.com/tidusjar/PlexRequests.Net/releases/latest -O - | grep -E \/tag\/ | awk -F "[<>]" '{print $3}' | cut -c 14-)
-wget -q https://github.com/tidusjar/PlexRequests.Net/releases/download/$plexrequestsver/PlexRequests.zip
-unzip PlexRequests.zip
-rm PlexRequests.zip
+plexrequestsver=$(wget -q https://github.com/tidusjar/Ombi/releases/latest -O - | grep -E \/tag\/ | awk -F "[<>]" '{print $3}' | cut -c 6-)
+wget -q https://github.com/tidusjar/Ombi/releases/download/$plexrequestsver/Ombi.zip
+unzip Ombi.zip
+rm Ombi.zip
 sudo cp -r -u Release/* /opt/plexrequest.net/
 rm -rf Release/
 service plexrequestsnet start
@@ -67,8 +71,8 @@ echo ""
 echo "Plex Media Server:"
 cd /opt/plexupdate
 bash plexupdate.sh -p
-dpkg -i plexmediaserver*.deb 2> /dev/null
-rm plexmediaserver*
+dpkg -i /tmp/plexmediaserver*.deb 2> /dev/null
+rm /tmp/plexmediaserver*
 
 ## Netdata
 echo ""
@@ -118,5 +122,8 @@ echo ""
 echo "Cleanup:"
 cd /opt/openflixr
 bash cleanup.sh
+echo ""
+echo "Nginx fix"
+mkdir /var/log/nginx
 
 # new_entry

@@ -45,13 +45,6 @@ echo "Delete any old Unix sockets"
      -print -delete
 echo""
 
-echo "delete any empty directories (other than lost+found)"
-/usr/bin/find $TMP_DIRS                               		\
-     -depth -mindepth 1                                         \
-     -type d -a -empty -a ! -name 'lost+found'                  \
-     -print -delete
-echo ""
-
 /usr/bin/logger "cleantmp.sh[$$] - Done cleaning tmp directories"
 
 exit 0
