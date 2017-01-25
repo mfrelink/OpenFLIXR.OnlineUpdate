@@ -13,6 +13,8 @@ echo "Date:          $TODAY"
 echo "-----------------------------------------------------"
 
 ## OpenFLIXR Update version 1.5.0
+export DEBIAN_FRONTEND="noninteractive"
+
 ## regression fixes
 # local caching recursor for faster DNS resolving
 apt-get update -y
