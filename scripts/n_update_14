@@ -13,8 +13,6 @@ echo "Date:          $TODAY"
 echo "-----------------------------------------------------"
 
 ## OpenFLIXR Update version 1.5.0
-export DEBIAN_FRONTEND=noninteractive
-
 ## regression fixes
 # local caching recursor for faster DNS resolving
 apt-get update -y
@@ -41,6 +39,11 @@ vnstat --create -i $nwadapter
 sed -i 's/LogLevel INFO.*/LogLevel ERROR/' /etc/ssh/sshd_config
 rm /etc/monit/conf.d/certificate
 
+# fix a lot of apt-get and php stuff
+echo "Dpkg::Options {" >> /etc/apt/apt.conf.d/50unattended-upgrades
+echo '   "--force-confdef";' >> /etc/apt/apt.conf.d/50unattended-upgrades
+echo '   "--force-confold";' >> /etc/apt/apt.conf.d/50unattended-upgrades
+echo "};" >> /etc/apt/apt.conf.d/50unattended-upgrades
 # trick to let script wait for apt-get release lock
 bash /opt/openflixr/apt-get-queue nano
 add-apt-repository ppa:ondrej/php -y
