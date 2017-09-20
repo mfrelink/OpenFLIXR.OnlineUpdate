@@ -1,0 +1,53 @@
+#!/bin/bash
+THISUSER=$(whoami)
+    if [ $THISUSER != 'root' ]
+        then
+            echo 'You must use sudo to run this script, sorry!'
+           exit 1
+    fi
+
+exec 1> >(tee -a /var/log/openflixrupdate/p_update_16.log) 2>&1
+TODAY=$(date)
+echo "-----------------------------------------------------"
+echo "Date:          $TODAY"
+echo "-----------------------------------------------------"
+
+## OpenFLIXR Update version 1.7.0
+# script updates
+cp /opt/update/updates/openflixr/updateof /opt/openflixr/updateof
+chmod +x /opt/openflixr/updateof
+cp /opt/update/updates/openflixr/updatewkly.sh /opt/openflixr/updatewkly.sh
+chmod +x /opt/openflixr/updatewkly.sh
+
+#mono update
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+
+#webmin update
+wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
+echo "deb http://download.webmin.com/download/repository sarge contrib" | sudo tee /etc/apt/sources.list.d/webmin.list
+
+#par2 multicore
+add-apt-repository ppa:jcfp/sab-addons
+apt-get update -y
+bash /opt/openflixr/apt-get-queue par2-tbb
+
+#misc
+service plexmediaserver start
+rm -f /etc/apt/apt.conf.d/50unattended-upgrades.ucf-dist
+bash /opt/openflixr/apt-get-queue sshfs
+cp /opt/update/updates/openflixr/createdirs /opt/openflixr/createdirs
+
+## update version
+touch /opt/openflixr/openflixr1
+sed -i 's/1.*/1.7.0 Never Say Never/' /opt/openflixr/version
+crudini --set /usr/share/nginx/html/setup/config.ini custom custom1 1.7.0
+
+## let system know update has been installed
+touch /opt/update/doneupdate/o_update_16
+
+# update
+bash /opt/openflixr/updatewkly.sh
+
+# reboot system just to be sure
+reboot now

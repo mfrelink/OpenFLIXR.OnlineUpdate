@@ -14,6 +14,7 @@ THISUSER=$(whoami)
 
 if mount | grep /mnt/downloads > /dev/null; then
 mkdir /mnt/downloads/blackholenzb
+mkdir /mnt/downloads/books
 mkdir /mnt/downloads/blackholenzbget
 mkdir /mnt/downloads/complete
 mkdir /mnt/downloads/incomplete

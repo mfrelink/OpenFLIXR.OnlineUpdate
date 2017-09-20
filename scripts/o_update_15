@@ -81,12 +81,5 @@ cp /opt/update/updates/cronjobs/letsrenew.sh /etc/cron.weekly
 chmod +x /etc/cron.weekly/letsrenew.sh
 chown root:root /etc/cron.weekly/letsrenew.sh
 
-## update version
-sed -i 's/1.*/1.6.0 The Story Continues/' /opt/openflixr/version
-crudini --set /usr/share/nginx/html/setup/config.ini custom custom1 1.6.0
-
 ## let system know update has been installed
 touch /opt/update/doneupdate/o_update_15
-
-# reboot system just to be sure
-reboot now

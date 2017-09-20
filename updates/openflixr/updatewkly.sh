@@ -36,7 +36,7 @@ tar -xvzf master
 sudo cp -r -u spotweb-spotweb*/* /var/www/spotweb/
 rm master
 rm -rf spotweb-spotweb*/
-cd /var/www/spotweb
+cd /var/www/spotweb/bin/
 php upgrade-db.php
 
 ## Jackett
@@ -45,7 +45,7 @@ echo "Jackett:"
 service jackett stop
 cd /tmp/
 rm Jackett.Binaries.Mono.tar.gz* 2> /dev/null
-jackettver=$(wget -q https://github.com/Jackett/Jackett/releases/latest -O - | grep -E \/tag\/ | awk -F "[><]" '{print $3}')
+jackettver=$(wget -q https://github.com/Jackett/Jackett/releases/latest -O - | grep -E \/tag\/ | awk -F "[><]" '{print $3}' | sed -n '2p')
 wget -q https://github.com/Jackett/Jackett/releases/download/$jackettver/Jackett.Binaries.Mono.tar.gz
 tar -xvf Jackett*
 sudo cp -r -u Jackett*/* /opt/jackett/
@@ -58,7 +58,7 @@ echo ""
 echo "Plexrequests.net:"
 service plexrequestsnet stop
 cd /tmp/
-plexrequestsver=$(wget -q https://github.com/tidusjar/Ombi/releases/latest -O - | grep -E \/tag\/ | awk -F "[<>]" '{print $3}' | cut -c 6-)
+plexrequestsver=$(wget -q https://github.com/tidusjar/Ombi/releases/latest -O - | grep -E \/tag\/ | awk -F "[<>]" '{print $3}' | cut -c 6- | sed -n '2p')
 wget -q https://github.com/tidusjar/Ombi/releases/download/$plexrequestsver/Ombi.zip
 unzip Ombi.zip
 rm Ombi.zip
