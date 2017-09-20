@@ -28,7 +28,7 @@ wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
 echo "deb http://download.webmin.com/download/repository sarge contrib" | sudo tee /etc/apt/sources.list.d/webmin.list
 
 #par2 multicore
-add-apt-repository ppa:jcfp/sab-addons
+add-apt-repository ppa:jcfp/sab-addons -y
 apt-get update -y
 bash /opt/openflixr/apt-get-queue par2-tbb
 
